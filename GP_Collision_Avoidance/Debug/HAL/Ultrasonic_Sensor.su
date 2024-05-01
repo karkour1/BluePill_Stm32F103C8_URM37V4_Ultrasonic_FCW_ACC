@@ -1,0 +1,5 @@
+Ultrasonic_Sensor.c:28:6:US_CB	8	static
+Ultrasonic_Sensor.c:50:6:HAL_US_Init	40	static
+Ultrasonic_Sensor.c:91:6:HAL_US_GET_DISTANCE_Serial_Passive_Mode	32	static
+Ultrasonic_Sensor.c:122:6:HAL_US_GET_DISTANC_PWM_Output_in_Trigger_Mode	16	static
+Ultrasonic_Sensor.c:151:6:HAL_US_GET_relativeAndFollowing_volcity	24	static

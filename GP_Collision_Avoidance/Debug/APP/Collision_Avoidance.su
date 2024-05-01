@@ -1,0 +1,7 @@
+Collision_Avoidance.c:55:7:Get_Vehicles_Situation	8	static
+Collision_Avoidance.c:92:6:APP_FCA_Detecte_Collision_Status	8	static
+Collision_Avoidance.c:132:6:APP_FCA_Calculte_Threshold	8	static
+Collision_Avoidance.c:160:6:APP_FCA_Get_Actual_Speed_deceleration	4	static
+Collision_Avoidance.c:165:6:APP_FCA_Set_Warning	16	static
+Collision_Avoidance.c:175:6:APP_FCA_Set_ACC	16	static
+Collision_Avoidance.c:185:6:APP_FCA_Set_Emergency_Brake	16	static

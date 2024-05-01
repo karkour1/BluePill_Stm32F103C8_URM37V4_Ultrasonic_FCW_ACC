@@ -1,0 +1,9 @@
+Stm32_F103C6_TIMERS_driver.c:34:6:TIMER_Enable	16	static
+Stm32_F103C6_TIMERS_driver.c:79:6:IRQ_Delay	4	static
+Stm32_F103C6_TIMERS_driver.c:89:6:IRQ_Count_Time	4	static
+Stm32_F103C6_TIMERS_driver.c:115:6:MCAL_TIMER_Delay	24	static
+Stm32_F103C6_TIMERS_driver.c:172:6:MCAL_TIMER_Start_Calculate_Time	16	static
+Stm32_F103C6_TIMERS_driver.c:188:10:MCAL_TIMER_Get_Time	24	static
+Stm32_F103C6_TIMERS_driver.c:225:6:TIM2_IRQHandler	8	static
+Stm32_F103C6_TIMERS_driver.c:229:6:TIM3_IRQHandler	8	static
+Stm32_F103C6_TIMERS_driver.c:233:6:TIM4_IRQHandler	8	static
