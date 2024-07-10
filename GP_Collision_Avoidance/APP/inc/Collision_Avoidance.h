@@ -29,7 +29,7 @@
 #define tbc			150  // the time between pressing the brake pedal of the following vehicle and the braking effect
 #define tbr         450  // deceleration time of the following vehicle
 #define thum 		1200 // the driver response time of the following vehicle
-#define D0  		200  // predetermined safe distance between the two vehicles, which is defined as 2 m.
+#define D0  		50  // predetermined safe distance between the two vehicles, which is defined as 2 m.
 #define ahmax       600    // the maximum deceleration of the following vehicle
 #define afmax       600    // the maximum deceleration of the front vehicle
 
@@ -72,6 +72,7 @@ void APP_FCA_Calculte_Threshold();
  */
 void APP_FCA_Get_Actual_Speed_deceleration();
 
+void APP_FCA_Init(USART_TypeDef* USARTx);
 void APP_FCA_Set_Warning(uint8_t W_State);
 void APP_FCA_Set_ACC(uint8_t ACC_State);
 void APP_FCA_Set_Emergency_Brake(uint8_t EMB_State);

@@ -27,6 +27,8 @@ TIMER_TypeDef* G_TIMERx ;
 
 // Delay Flag
 uint8_t Delay_Flag = 0 ;
+
+uint64_t timerTicksTIM1 , xMicros , overflowTimsTIM1 ;
 /*
  * =======================================================================================
  * 							Generic Function
@@ -34,6 +36,8 @@ uint8_t Delay_Flag = 0 ;
  */
 void TIMER_Enable(TIMER_TypeDef* TIMERx)
 {
+	G_TIMERx = TIMERx;
+
 	//Bit 4 DIR: Direction , 0: Counter used as up counter
 	TIMERx->CR1 &= ~(1<<4);
 
@@ -113,6 +117,27 @@ void IRQ_Count_Time(void)
  * 									APIS
  * =======================================================================================
  */
+void MCAL_TIMER_DeInit(TIMER_TypeDef* TIMERx )
+{
+	if(TIMERx == TIMER2)
+	{
+		// Reset Timer
+		RCC_TIMER2_RESET();
+		NVIC_IRQ28_TIM2_DISABLE;
+	}
+	else 	if(TIMERx == TIMER3)
+	{
+		// Reset Timer
+		RCC_TIMER3_RESET();
+		NVIC_IRQ29_TIM3_DISABLE;
+	}
+	else 	if(TIMERx == TIMER4)
+	{
+		// Reset Timer
+		RCC_TIMER4_RESET();
+		NVIC_IRQ30_TIM4_DISABLE;
+	}
+}
 void MCAL_TIMER_Delay(TIMER_TypeDef* TIMERx ,uint32_t time ,uint32_t unit)
 {
 	G_TIMERx = TIMERx;
@@ -170,31 +195,47 @@ void MCAL_TIMER_Delay(TIMER_TypeDef* TIMERx ,uint32_t time ,uint32_t unit)
 	*/
 	TIMERx->CR1 &= ~(1<<0);
 }
-void MCAL_TIMER_Start_Calculate_Time(TIMER_TypeDef* TIMERx )
+void MCAL_TIMER_Start_Stop_Calculate_Time(TIMER_TypeDef* TIMERx , Time_state_t state )
 {
-	// Timer off
-	TIMERx->CR1 &= ~(1<<0);
+	if(state == start)
+	{
+		// Timer off
+		TIMERx->CR1 &= ~(1<<0);
 
 
-	//Set AAR_REG value  , PSC_REG value
-	TIMERx->ARR = 65500;
-	TIMERx->PSC = 1 ;
+		//Set AAR_REG value  , PSC_REG value
+		TIMERx->ARR = 65500;
+		TIMERx->PSC = 1 ;
 
-	// Set IRQ Callback
-	P_IRQ_CallBack_Fun = IRQ_Count_Time ;
+		// Set IRQ Callback
+		P_IRQ_CallBack_Fun = IRQ_Count_Time ;
 
-	// Enable Timer
-	TIMER_Enable(TIMERx);
+		// Reset overflow handler
+		OverFlow_Number[0] = 0 ;
+		OverFlow_Number[1] = 0 ;
+		OverFlow_Number[2] = 0 ;
+
+		// Enable Timer
+		TIMER_Enable(TIMERx);
+	}
+	else if(state == stop)
+	{
+		// Disable Timer
+		/*Bit 0 CEN: Counter enable
+			0: Counter disabled
+			1: Counter enabled
+		*/
+		TIMERx->CR1 &= ~(1<<0);
+		TIMERx->CNT = 0 ;
+
+		// Reset overflow handler
+		OverFlow_Number[0] = 0 ;
+		OverFlow_Number[1] = 0 ;
+		OverFlow_Number[2] = 0 ;
+	}
 }
 uint32_t MCAL_TIMER_Get_Time(TIMER_TypeDef* TIMERx )
 {
-	// Disable Timer
-	/*Bit 0 CEN: Counter enable
-		0: Counter disabled
-		1: Counter enabled
-	*/
-	TIMERx->CR1 &= ~(1<<0);
-
 	// Calculate Time
 	uint32_t time ;
 	if(G_TIMERx == TIMER2)
@@ -214,7 +255,7 @@ uint32_t MCAL_TIMER_Get_Time(TIMER_TypeDef* TIMERx )
 
 }
 
-void PWM(TIMER_TypeDef* TIMERx,uint32_t CH,uint32_t duty_cycle,uint32_t freq){
+void MCAL_TIMER_Generate_PWM(TIMER_TypeDef* TIMERx,uint32_t CH,uint32_t duty_cycle,uint32_t freq){
 
 	TIMERx->CR1 &=~(1<<0);//Counter disabled
 
@@ -504,7 +545,31 @@ void PWM(TIMER_TypeDef* TIMERx,uint32_t CH,uint32_t duty_cycle,uint32_t freq){
 
 }
 
+void TIM1CalcMicrosInit(void){
 
+	// Enable Clock For Timer 1
+	RCC_TIMER1_CLK_EN();
+
+	TIMER1->CR1 &= ~(1<<0);
+	TIMER1 -> CR1 |= (1 << 2);
+	TIMER1 -> DIER |= (1 << 0);
+
+	TIMER1->ARR = 64000; // Peak value to get delay of 8ms at freq = 8000000hz
+
+	TIMER1->PSC = 0;
+	TIMER1->EGR |= (1<<0);
+	// Enable Timer
+	TIMER1->CR1 |= (1 << 0);
+
+	NVIC_IRQ25_TIM1_UP_ENABLE;
+}
+
+
+uint64_t TIM1CalcMicros(uint32_t clk){
+	timerTicksTIM1 = TIMER1->CNT;
+	xMicros = ((timerTicksTIM1 + overflowTimsTIM1 * 64000)) / (clk/1000000); // (time in micro-seconds)
+	return xMicros;
+}
 
 /*
  * =======================================================================================
@@ -522,4 +587,9 @@ void TIM3_IRQHandler(void)
 void TIM4_IRQHandler(void)
 {
 	P_IRQ_CallBack_Fun();
+}
+void TIM1_UP_IRQHandler() {
+        // Clear the update interrupt flag
+		TIMER1->SR &= ~(1 << 0);
+    	overflowTimsTIM1++;
 }

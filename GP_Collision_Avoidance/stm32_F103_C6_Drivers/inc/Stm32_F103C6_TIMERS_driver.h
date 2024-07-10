@@ -21,6 +21,10 @@
 //	Macros define
 //-----------------------------
 
+typedef enum {
+	start,
+	stop
+}Time_state_t;
 // Timer Clock
 #define TIMER_CLK				8  // The default clock to Timer peripherals(MHZ)
 
@@ -38,10 +42,11 @@
 //-----------------------------
 //	APIS
 //-----------------------------
+void MCAL_TIMER_DeInit(TIMER_TypeDef* TIMERx );
 void MCAL_TIMER_Delay(TIMER_TypeDef* TIMERx ,uint32_t time ,uint32_t unit);
-void MCAL_TIMER_Start_Calculate_Time(TIMER_TypeDef* TIMERx );
+void MCAL_TIMER_Start_Stop_Calculate_Time(TIMER_TypeDef* TIMERx , Time_state_t state );
 uint32_t MCAL_TIMER_Get_Time(TIMER_TypeDef* TIMERx );
 
-void PWM(TIMER_TypeDef* TIMERx,uint32_t CH,uint32_t duty_cycle,uint32_t freq) ;
+void MCAL_TIMER_Generate_PWM(TIMER_TypeDef* TIMERx,uint32_t CH,uint32_t duty_cycle,uint32_t freq) ;
 
 #endif /* INC_STM32_F103C6_TIMERS_DRIVER_H_ */

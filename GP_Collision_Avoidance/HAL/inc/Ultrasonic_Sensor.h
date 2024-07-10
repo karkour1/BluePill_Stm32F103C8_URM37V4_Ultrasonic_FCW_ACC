@@ -23,7 +23,9 @@
 // The Mode Of URM37 V4.0 Ultrasonic Sensor
 typedef enum {
 	Serial_Passive_Mode ,
-	PWM_Output_in_Trigger_Mode
+	PWM_Output_in_Trigger_Mode ,
+	TF_LUNA_LIDAR_MODE ,
+	UART_With_Microcontroller
 }URM37_US_mode_t;
 
 /*
@@ -39,7 +41,7 @@ typedef enum {
  * @retval 			-none
  * Note				-in Serial_Passive_Mode you must select the USART that you use correct
  */
-void HAL_US_Init(URM37_US_mode_t Sensor_Mode , USART_TypeDef* USARTx);
+void HAL_US_Init(URM37_US_mode_t Sensor_Mode , USART_TypeDef* USARTx , TIMER_TypeDef* TIMERx);
 /**================================================================
  * @Fn				- HAL_US_GET_DISTANCE_Serial_Passive_Mode
  * @brief 			- By serial, you have all authority to access to the sensor such as:
@@ -58,6 +60,22 @@ void HAL_US_GET_DISTANCE_Serial_Passive_Mode(uint16_t* US_distance);
  * Note				-none
  */
 void HAL_US_GET_DISTANC_PWM_Output_in_Trigger_Mode(uint16_t* US_distance);
+/**================================================================
+ * @Fn				- HAL_US_GET_Distance_TF_Luna_Lidar
+ * @brief 			- Get Distance Using TFLuna Lidar Sensor using UART Serial interface with The Sensor
+ * @param [in] 		- TF_distance: Pointer to the Place which distance Store in
+ * @retval 			-none
+ * Note				-none
+ */
+void HAL_US_GET_Distance_TF_Luna_Lidar(uint16_t* TF_distance);
+/**================================================================
+ * @Fn				- Hal_US_GET_distance
+ * @brief 			- Get Distance by interface with another microcontroller using UART Communication
+ * @param [in] 		- TF_distance: Pointer to the Place which distance Store in
+ * @retval 			-none
+ * Note				-none
+ */
+void Hal_US_GET_distance(uint16_t* TF_distance);
 /**================================================================
  * @Fn				- HAL_US_GET_relativeAndFollowing_volcity
  * @brief 			- Get relative velocity and velocity of the following vechile
