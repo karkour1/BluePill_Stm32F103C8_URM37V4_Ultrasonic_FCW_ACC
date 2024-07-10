@@ -12,7 +12,6 @@ This project implements Forward Collision Warning (FCW) using the STM32F103C8 Bl
 - Breadboard (optional)
 
 ## Wiring Diagram
-![Wiring Diagram](path_to_your_wiring_diagram_image)
 
 ### Connect the components as follows:
 - **URM37 V4 Ultrasonic Sensor to BluePill:**
@@ -39,11 +38,14 @@ The software is written in C/C++ and uses the STM32 HAL library. Key features in
 - Warning level outputs on PA12 and PA15
 
 ## Installation
-1. **Install the required development tools:**
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your_username/FCW_Stm32F103C8.git
+   cd FCW_Stm32F103C8
+2. **Install the required development tools:**
    - STM32CubeMX
    - Keil uVision or STM32CubeIDE
-
-2. **Open the project in your IDE and build it:**
+3. **Open the project in your IDE and build it:**
    - Configure your STM32 microcontroller settings using STM32CubeMX.
    - Open the generated project in Keil uVision or STM32CubeIDE.
    - Build the project to compile the firmware.
